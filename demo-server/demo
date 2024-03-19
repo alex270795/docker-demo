@@ -1,0 +1,2 @@
+[demo]
+172.27.132.143 ansible_user=alex ansible_port=22

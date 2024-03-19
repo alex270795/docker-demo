@@ -1,0 +1,24 @@
+---
+- name: user
+  hosts: demo
+  tasks:
+    - name: Preconfig block
+      block:
+       - name: Sleep
+         command: /bin/sleep 15
+         async: 1000  //кол-во секунд выполнения запроса
+         poll:0       //каждые 5 секунд будет проверяться 
+         register: sleep
+      - debug:
+          var: sleep
+       - name: Echo
+         command: echo "DONE"
+      become: true
+    - name: Check sleep status
+      async_status:
+        jid: "{{ sleep.ansible_job_id }}" //проверяем статус нашего jobid в таске Sleep;
+      register: job_result
+      until: job_result.finished //ждём пока задача не будет finished;
+      retries: 100  //выполняем проверку максимум 100 раз  с разницей 1 сек.
+      delay: 1
+      become: true
