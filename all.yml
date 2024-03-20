@@ -1,0 +1,5 @@
+---
+- name: ALL config
+  hosts: demo
+  roles:
+    - preconfig
